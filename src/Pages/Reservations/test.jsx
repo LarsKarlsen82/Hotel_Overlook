@@ -1,44 +1,27 @@
-import { useSupabase } from '../../Providers/SupabaseProvider';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const Reservation = () => {
-  const supabase = useSupabase();
-  const [cities, setCities] = useState([]);
-  const [rooms, setRooms] = useState([]);
+  const initialFormData = {
+    destination: '',
+    roomType: '',
+    numberOfPeople: '',
+    priceClass: '',
+    checkInDate: '',
+    checkOutDate: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    comments: '',
+    acceptTerms: false,
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in the 'YYYY-MM-DD' format
 
-  useEffect(() => {
-    const fetchCities = async () => {
-      try {
-        const { data, error } = await supabase.from('cities').select('*');
-        if (error) {
-          throw error;
-        }
-        setCities(data);
-      } catch (error) {
-        console.error('Error fetching cities:', error.message);
-      }
-    };
-
-    const fetchRooms = async () => {
-      try {
-        const { data, error } = await supabase.from('rooms').select('*');
-        if (error) {
-          throw error;
-        }
-        setRooms(data);
-      } catch (error) {
-        console.error('Error fetching rooms:', error.message);
-      }
-    };
-
-    fetchCities();
-    fetchRooms();
-  }, [supabase]);
-
-    const validateForm = () => {
+  const validateForm = () => {
     const errors = {};
 
     ['destination', 'roomType', 'numberOfPeople', 'priceClass', 'checkInDate', 'checkOutDate', 'firstName', 'lastName', 'email', 'phone', 'acceptTerms'].forEach((field) => {
@@ -85,21 +68,17 @@ const Reservation = () => {
     setIsSubmitted(false);
   };
 
-  const [formData, setFormData] = useState({
-    destination: '',
-    // ... other form fields
-  });
-
 
   return (
     <div className="container mx-auto mt-8 p-4">
       <div className="reservation-form-container max-w-md mr-4">
-        <h2 className="text-2xl font-bold">Hotel Overlook &gt; Reservation</h2>
-        <h3 className="text-xl font-semibold mb-4">Reservation</h3>
+        <h2 className="text-xl font-bold">Hotel Overlook &gt; Reservation</h2>
+        <br />
+        <h3 className="text-2xl font-bold mb-4">Reservation</h3>
         <p>Udfyld nedenstående formular for at reservere et af vores værelser.</p>
 
         {/* Vertical red line on the right side */}
-        <div className="vl bg-gray-400 h-3/4 w-2 absolute lg:right-64 sm:right-0 right-0 lg:left-auto left-auto" />
+        <div className="vl bg-gray-400 h-3/4 w-1 absolute lg:right-64 sm:right-0 right-0 lg:left-auto left-auto" />
 
       
       <form className="max-w-md  mt-4" onSubmit={handleSubmit}>
@@ -128,7 +107,13 @@ const Reservation = () => {
               className="mt-1 p-2 w-full border rounded"
             >
               <option value="">Vælg værelse</option>
-              <option value="single">Single Room</option>
+              <option value="single">Economy Room</option>
+              <option value="single">Superior Plus Room</option>
+              <option value="single">Superior Room</option>
+              <option value="single">Junior Suite Room</option>
+              <option value="single">Presidential Suite Room</option>
+              <option value="single">Standard Single Room</option>
+              <option value="single">Standard Room</option>
               {/* Add more options as needed */}
             </select>
             {formErrors.roomType && <p className="text-red-500 text-sm">{formErrors.roomType}</p>}
@@ -145,6 +130,8 @@ const Reservation = () => {
               <option value="">Vælg antal personer</option>
               <option value="1">1 person</option>
               <option value="2">2 personer</option>
+              <option value="3">3 personer</option>
+              <option value="4"> Flere personer</option>
               {/* Add more options as needed */}
             </select>
             {formErrors.numberOfPeople && <p className="text-red-500 text-sm">{formErrors.numberOfPeople}</p>}
@@ -324,3 +311,5 @@ const Reservation = () => {
 };
 
 export default Reservation;
+
+    

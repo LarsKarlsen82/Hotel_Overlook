@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+//Reservations.jsx
+import React, { useState, useEffect } from 'react';
+import { useSupabase } from '../../Providers/SupabaseProvider';
+import { useParams } from 'react-router-dom';
 
 const Reservation = () => {
   const initialFormData = {
@@ -19,7 +22,16 @@ const Reservation = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const today = new Date().toISOString().split('T')[0]; // Get today's date in the 'YYYY-MM-DD' format
+  const today = new Date().toISOString().split('T')[0];
+  const urlParams = new URLSearchParams(window.location.search);
+  const hotelId = urlParams.get('hotelId');
+  const hotelTitle = urlParams.get('hotelTitle');
+  const roomId = urlParams.get('roomId');
+
+  const supabase = useSupabase();
+  const [hotelIds, setHotelIds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const priceClass = urlParams.get('priceClass'); 
 
   const validateForm = () => {
     const errors = {};
@@ -55,9 +67,6 @@ const Reservation = () => {
 
     if (validateForm()) {
       console.log('Form submitted:', formData);
-      // Add logic for form submission
-
-      // Set the form as submitted
       setIsSubmitted(true);
     }
   };
@@ -68,33 +77,103 @@ const Reservation = () => {
     setIsSubmitted(false);
   };
 
+  // Set the initial state of formData.priceClass using the received price class
+  useEffect(() => {
+    setFormData(prevData => ({
+      ...prevData,
+      priceClass: priceClass || '' // Set the received price class or an empty string if not provided
+    }));
+  }, [priceClass]);
 
+  // Set the state of the radio buttons when the price class changes
+  useEffect(() => {
+    // Update the state based on the selected price class
+    if (priceClass === 'Normal' || priceClass === 'Flex') {
+      setFormData(prevData => ({
+        ...prevData,
+        priceClass: priceClass
+      }));
+    }
+  }, [priceClass]);
+
+
+  useEffect(() => {
+    async function fetchHotelIds() {
+      try {
+        const { data, error } = await supabase.supabase
+          .from('hotels')
+          .select('title');
+
+        if (error) {
+          console.error('Error fetching hotel IDs:', error.message);
+          setLoading(false);
+          return;
+        }
+
+        const ids = data.map(hotel => hotel.title);
+        setHotelIds(ids);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching hotel IDs:', error.message);
+        setLoading(false);
+      }
+    }
+
+    fetchHotelIds();
+  }, [supabase]);
+
+  // Define a lookup object mapping room IDs to room titles
+const roomTitles = {
+  1: 'Economy Room',
+  2: 'Superior Plus Room',
+  3: 'Superior',
+  4: 'Junior Suite',
+  5: 'Presidential Suite',
+  6: 'Standard Single',
+  7: 'Standard'
+  // Add more room IDs and titles as needed
+};
+
+const renderHotelDetails = hotelId && hotelTitle && roomId && (
+  <div className="mt-8 p-4 bg-gray-100">
+    <h2 className="text-xl font-bold">Huskeseddel</h2>
+    <br />
+    <p>Valgt hotel : {hotelTitle}</p>
+    <p>Valgt værelse: {roomTitles[roomId]}</p>
+  </div>
+);
   return (
     <div className="container mx-auto mt-8 p-4">
       <div className="reservation-form-container max-w-md mr-4">
-        <h2 className="text-2xl font-bold">Hotel Overlook &gt; Reservation</h2>
-        <h3 className="text-xl font-semibold mb-4">Reservation</h3>
+        <h2 className="text-xl font-bold">Hotel Overlook &gt; Reservation</h2>
+        <br />
+        <h3 className="text-2xl font-bold mb-4">Reservation</h3>
+
+        {renderHotelDetails}
+
         <p>Udfyld nedenstående formular for at reservere et af vores værelser.</p>
 
         {/* Vertical red line on the right side */}
         <div className="vl bg-gray-400 h-3/4 w-1 absolute lg:right-64 sm:right-0 right-0 lg:left-auto left-auto" />
-
+ 
       
-      <form className="max-w-md  mt-4" onSubmit={handleSubmit}>
+        <form className="max-w-md  mt-4" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium">Vælg destination:</label>
-          <select
-            name="destination"
-            value={formData.destination}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded"
-          >
-            <option value="">Vælg destination</option>
-            <option value="destination1">Destination 1</option>
-            {/* Add more options as needed */}
-          </select>
-          {formErrors.destination && <p className="text-red-500 text-sm">{formErrors.destination}</p>}
-        </div>
+    <label className="block text-sm font-medium">Vælg hotel:</label>
+    <select
+  name="destination"
+  value={formData.destination}
+  onChange={handleInputChange}
+  className="mt-1 p-2 w-full border rounded"
+>
+  <option value="">Vælg hotel</option>
+  {/* Map hotel IDs to options */}
+  {hotelIds.map(id => (
+    <option key={id} value={id}>{id}</option>
+  ))}
+</select>
+    {formErrors.destination && <p className="text-red-500 text-sm">{formErrors.destination}</p>}
+  </div>
 
         <div className="mb-4 flex">
           <div className="w-1/2 mr-2">
@@ -106,7 +185,13 @@ const Reservation = () => {
               className="mt-1 p-2 w-full border rounded"
             >
               <option value="">Vælg værelse</option>
-              <option value="single">Single Room</option>
+              <option value="single">Economy Room</option>
+              <option value="single">Superior Plus Room</option>
+              <option value="single">Superior Room</option>
+              <option value="single">Junior Suite Room</option>
+              <option value="single">Presidential Suite Room</option>
+              <option value="single">Standard Single Room</option>
+              <option value="single">Standard Room</option>
               {/* Add more options as needed */}
             </select>
             {formErrors.roomType && <p className="text-red-500 text-sm">{formErrors.roomType}</p>}
@@ -123,6 +208,8 @@ const Reservation = () => {
               <option value="">Vælg antal personer</option>
               <option value="1">1 person</option>
               <option value="2">2 personer</option>
+              <option value="3">3 personer</option>
+              <option value="4"> Flere personer</option>
               {/* Add more options as needed */}
             </select>
             {formErrors.numberOfPeople && <p className="text-red-500 text-sm">{formErrors.numberOfPeople}</p>}

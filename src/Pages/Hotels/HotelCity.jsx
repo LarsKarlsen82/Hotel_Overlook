@@ -160,7 +160,7 @@ const HotelCity = () => {
       <div className="hidden lg:block vl bg-gray-400 h-3/4 w-1 absolute lg:right-64 sm:right-0 right-0 lg:left-auto left-auto" />
 
       {/* Padding */}
-      <div className="mt-8 px-4 lg:px-12 xl:px-24"> {/* Add padding to the entire section */}
+      <div className="mt-8 px-4 lg:px-12 xl:px-24 mr-48"> {/* Add padding to the entire section */}
         {/* City description */}
         {selectedCity && (
           <div className="mt-8">
@@ -168,9 +168,11 @@ const HotelCity = () => {
             <p>{selectedCity.description}</p>
           </div>
         )}
-
+        <br />
+      <h3 className='text-xl font-bold'>Klik på hotel for informationer</h3>
         {/* Hotels */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
           {hotels.map(hotel => (
             <Link to={`/hotels/${selectedCity.name}/${hotel.id}`} key={hotel.id} className="cursor-pointer p-2 rounded-lg border border-gray-300 hover:bg-gray-100">
               <img src={`https://ouxemfujuurkzesgdrsu.supabase.co/storage/v1/object/public/Test_storage/${hotel.image_id}.jpg`} alt={hotel.name} className="w-full h-64 object-cover rounded-lg mb-4" />

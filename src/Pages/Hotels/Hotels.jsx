@@ -11,6 +11,7 @@ const Hotels = () => {
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [hotels, setHotels] = useState([]);
+  const [hideHeading, setHideHeading] = useState(false);
 
   useEffect(() => {
     async function fetchCountries() {
@@ -25,6 +26,14 @@ const Hotels = () => {
         }
 
         setCountries(data);
+        
+        // Hide the heading after 2 seconds
+        const timeout = setTimeout(() => {
+          setHideHeading(true);
+        }, 3000);
+
+        // Clear timeout to prevent memory leak
+        return () => clearTimeout(timeout);
       } catch (error) {
         console.error('Error fetching countries:', error.message);
       }
@@ -32,6 +41,7 @@ const Hotels = () => {
 
     fetchCountries();
   }, [supabase]);
+
 
   const handleCountrySelect = async (country) => {
     setSelectedCountry(country);
@@ -97,11 +107,13 @@ const Hotels = () => {
       </div>
 
       <div className="mt-8 px-4 lg:px-12 xl:px-24"> {/* Padding */}
+      
         {/* Countries List */}
         <div className="text-center mt-8">
           <div className="relative inline-block w-1/2">
             <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-white"></div>
             <div className="relative z-10 bg-gray-100 p-2 rounded-lg shadow-md">
+              {!hideHeading && <h2 className='font-bold'>Vælg land</h2>}
               {countries.map(country => (
                 <a key={country.id} onClick={() => handleCountrySelect(country)} className="cursor-pointer hover:text-red-500 mx-2 inline-block">
                   <p className="inline-block">{country.name}</p>
@@ -110,7 +122,6 @@ const Hotels = () => {
             </div>
           </div>
         </div>
-
 
 
         {/* Display cities */}

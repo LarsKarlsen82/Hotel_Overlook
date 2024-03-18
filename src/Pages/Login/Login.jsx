@@ -138,6 +138,11 @@ const LoginPage = () => {
     <button onClick={handleLogout} className="text-indigo-500 hover:text-indigo-600">
         Log out
     </button>
+    <br /><br />
+    <div>
+        <h2 className="font-bold">Administrer reservationer</h2> 
+        <br />
+        <p>Her kan du afbestille dine reservationer </p></div>
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"> {/* Brug CSS grid til at oprette et grid-layout med en kolonne på mindre skærme og flere kolonner på større skærme */}
         {/* Display imported reservation details */}
         {reservations.map((reservation, index) => (
@@ -147,7 +152,7 @@ const LoginPage = () => {
                 <p>Check-out Date: {reservation.checkOutDate}</p>
                 <p>Destination: {reservation.destination}</p>
                 <p>Room Type: {reservation.roomType}</p>
-                <button onClick={() => handleDeleteReservation(index)}>Delete</button>
+                <button onClick={() => handleDeleteReservation(index)} className="font-bold">Afbestil/slet</button>
             </div>
         ))}
     </div>

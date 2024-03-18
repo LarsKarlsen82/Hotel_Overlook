@@ -7,10 +7,16 @@
 
 4. FlowChart for Hotel Overlook ligger på min github wiki
 
-5. For nærmere informatiner, se min rapport i wiki
+5. For nærmere informatiner, se min rapport som er vedhæftet  til denne opgave.
 
+* For at starte web app:
 
-For login er der følgende brugere:
+Åbn terminal
+tast npm run dev
+hold CTRL knappen og klik på linket
+
+* For login er der følgende brugere:
+
 Bruger: heinz@techcollege.dk
 kode:Abcd1234!
 

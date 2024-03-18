@@ -206,17 +206,17 @@ const renderHotelDetails = hotelId && hotelTitle && roomId && (
         <div className="mb-4">
     <label className="block text-sm font-medium">Vælg hotel:</label>
     <select
-  name="destination"
-  value={formData.destination}
-  onChange={handleInputChange}
-  className="mt-1 p-2 w-full border rounded"
->
-  <option value="">Vælg hotel</option>
-  {/* Map hotel IDs to options */}
-  {hotelIds.map(id => (
-    <option key={id} value={id}>{id}</option>
-  ))}
-</select>
+      name="destination"
+      value={formData.destination}
+      onChange={handleInputChange}
+      className="mt-1 p-2 w-full border rounded"
+    >
+      <option value="">Vælg hotel</option>
+      {/* Sort hotel titles alphabetically before mapping */}
+      {hotelIds.sort((a, b) => a.localeCompare(b)).map(id => (
+        <option key={id} value={id}>{id}</option>
+      ))}
+    </select>
     {formErrors.destination && <p className="text-red-500 text-sm">{formErrors.destination}</p>}
   </div>
 

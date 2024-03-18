@@ -1,4 +1,3 @@
-// Login.jsxx
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import { Auth } from "@supabase/auth-ui-react";
@@ -12,6 +11,7 @@ const LoginPage = () => {
     const { login, logout } = useAuth();
     const [session, setSession] = useState(null);
     const [reservations, setReservations] = useState([]);
+    const [hotels, setHotels] = useState([]);
     const location = useLocation();
 
     const handleLogout = async () => {
@@ -78,6 +78,24 @@ const LoginPage = () => {
         setReservations(updatedReservations);
       }
     }, [location.search]);
+
+    useEffect(() => {
+      async function fetchHotelData() {
+        try {
+          const { data: hotels, error } = await supabase
+            .from('hotels')
+            .select('phone');
+          if (error) {
+            throw error;
+          }
+          setHotels(hotels);
+        } catch (error) {
+          console.error('Error fetching hotel data:', error.message);
+        }
+      }
+      fetchHotelData();
+    }, []);
+
     useEffect(() => {
         // Retrieve reservations from localStorage when component mounts
         const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
@@ -89,28 +107,6 @@ const LoginPage = () => {
         updatedReservations.splice(index, 1);
         localStorage.setItem('reservations', JSON.stringify(updatedReservations));
         setReservations(updatedReservations);
-    };
-
-    const saveReservation = async (reservationData) => {
-        try {
-            const user = supabase.auth.user();
-            if (!user) {
-                throw new Error("User not authenticated");
-            }
-
-            // Get existing reservations for the user from local storage
-            const existingReservations = JSON.parse(localStorage.getItem(user.email)) || [];
-
-            // Add the new reservation to the existing list
-            const updatedReservations = [...existingReservations, reservationData];
-
-            // Save the updated reservations back to local storage
-            localStorage.setItem(user.email, JSON.stringify(updatedReservations));
-
-            console.log("Reservation saved successfully:", reservationData);
-        } catch (error) {
-            console.error("Error saving reservation:", error.message);
-        }
     };
 
     if (!session) {
@@ -132,33 +128,32 @@ const LoginPage = () => {
         );
     } else {
         return (
-<ContentWrapper title="Logged in">
-    <p>You are logged in as {session.user.email}</p>
-    <button onClick={handleLogout} className="text-indigo-500 hover:text-indigo-600">
-        Log out
-    </button>
-    <br /><br />
-    <div>
-        <h2 className="font-bold">Administrer reservationer</h2> 
-        <br />
-        <p>Her kan du afbestille dine reservationer </p></div>
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"> {/* Brug CSS grid til at oprette et grid-layout med en kolonne på mindre skærme og flere kolonner på større skærme */}
-        {/* Display imported reservation details */}
-        {reservations.map((reservation, index) => (
-            <div key={index} className="border p-4"> {/* Tilføjet en border og padding til hver reservation */}
-                <h4 className="font-bold">Reservation {index + 1}:</h4>
-                <p>Check-in Date: {reservation.checkInDate}</p>
-                <p>Check-out Date: {reservation.checkOutDate}</p>
-                <p>Destination: {reservation.destination}</p>
-                <p>Room Type: {reservation.roomType}</p>
-                <button onClick={() => handleDeleteReservation(index)} className="font-bold">Afbestil/slet</button>
-            </div>
-        ))}
-    </div>
-</ContentWrapper>
-
-
-
+            <ContentWrapper title="Logged in">
+                <p>You are logged in as {session.user.email}</p>
+                <button onClick={handleLogout} className="text-indigo-500 hover:text-indigo-600">
+                    Log out
+                </button>
+                <br /><br />
+                <div>
+                    <h2 className="font-bold">Administrer reservationer</h2>
+                    <br />
+                    <p>Her kan du ændre og afbestille dine reservationer </p></div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"> {/* Brug CSS grid til at oprette et grid-layout med en kolonne på mindre skærme og flere kolonner på større skærme */}
+                    {/* Display imported reservation details */}
+                    {reservations.map((reservation, index) => (
+                        <div key={index} className="border p-4">
+                            <h4 className="font-bold">Reservation {index + 1}:</h4>
+                            <p>Check-in Date: {reservation.checkInDate}</p>
+                            <p>Check-out Date: {reservation.checkOutDate}</p>
+                            <p>Destination: {reservation.destination}</p>
+                            <p>Room Type: {reservation.roomType}</p>
+                            <button onClick={() => handleDeleteReservation(index)} className="font-bold text-red-600">Afbestil/slet</button>
+                            <br /> <br />
+                            <p className="font-bold text-green-700">For at ændre reservationen ring til: {hotels[index]?.phone}</p>
+                        </div>
+                    ))}
+                </div>
+            </ContentWrapper>
         );
     }
 };

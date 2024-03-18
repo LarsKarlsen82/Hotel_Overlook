@@ -434,3 +434,4 @@ const renderHotelDetails = hotelId && hotelTitle && roomId && (
 };
 
 export default Reservation;
+

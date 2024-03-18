@@ -16,27 +16,21 @@ const NavBar = () => {
     setMenuVisible(!isMenuVisible);
   };
 
-    // Listen for changes in the authentication status
-    useEffect(() => {
-      // You can perform any other actions here when the authentication status changes
-      console.log('Authentication status changed:', user);
-    }, [user]);
+  // Listen for changes in the authentication status
+  useEffect(() => {
+    // You can perform any other actions here when the authentication status changes
+    console.log('Authentication status changed:', user);
+  }, [user]);
 
   return (
     <div>
       <header>
         <nav className="flex flex-wrap items-center justify-between w-full py-4 md:py-0 px-4 text-lg text-white bg-gray-800">
-          <div className=' pl-24 py-8'>
-            <h2 className='text-4xl'>Hotel Overlook</h2>
+          {/* Line 2px above "Hotel Overlook" */}
+          <div className="relative">
+          <div className="absolute top-0 left-1/4 w-1/2 h-0.5 bg-yellow-500 opacity-50"></div>
 
-            <div className="text-yellow-500 mt-4 bg-gray-800">
-              {/* Add stars here */}
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-            </div>
+            <h2 className="text-4xl relative z-10">Hotel Overlook</h2>
           </div>
 
           <FontAwesomeIcon
@@ -78,11 +72,25 @@ const NavBar = () => {
                   Login
                 </Link>
               </li>
-
-            </ul> 
+            </ul>
           </div>
         </nav>
       </header>
+
+      <div className="text-yellow-500 pl-20 bg-gray-800 relative">
+  {/* First star */}
+  <FontAwesomeIcon icon={faStar} />
+  {/* Line after the first star */}
+  <div className="absolute top-1/2 left-8 transform -translate-y-0.5 w-1/5 h-0.5 bg-yellow-500"></div>
+  <FontAwesomeIcon icon={faStar} />
+  <FontAwesomeIcon icon={faStar} />
+  <FontAwesomeIcon icon={faStar} />
+  <FontAwesomeIcon icon={faStar} />
+  <FontAwesomeIcon icon={faStar} />
+</div>
+
+
+
 
       {user && (
         <div className="text-white mt-4 bg-gray-800 p-2">
@@ -94,3 +102,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+

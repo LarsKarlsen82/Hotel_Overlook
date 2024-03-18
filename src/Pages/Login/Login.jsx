@@ -133,23 +133,28 @@ const LoginPage = () => {
         );
     } else {
         return (
-            <ContentWrapper title="Logged in">
-                <p>You are logged in as {session.user.email}</p>
-                <button onClick={handleLogout} className="text-indigo-500 hover:text-indigo-600">
-                    Log out
-                </button>
-                {/* Display imported reservation details */}
-                {reservations.map((reservation, index) => (
-                    <div key={index}>
-                        <p>Reservation {index + 1}:</p>
-                        <p>Check-in Date: {reservation.checkInDate}</p>
-                        <p>Check-out Date: {reservation.checkOutDate}</p>
-                        <p>Destination: {reservation.destination}</p>
-                        <p>Room Type: {reservation.roomType}</p>
-                        <button onClick={() => handleDeleteReservation(index)}>Delete</button>
-                    </div>
-                ))}
-            </ContentWrapper>
+<ContentWrapper title="Logged in">
+    <p>You are logged in as {session.user.email}</p>
+    <button onClick={handleLogout} className="text-indigo-500 hover:text-indigo-600">
+        Log out
+    </button>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"> {/* Brug CSS grid til at oprette et grid-layout med en kolonne på mindre skærme og flere kolonner på større skærme */}
+        {/* Display imported reservation details */}
+        {reservations.map((reservation, index) => (
+            <div key={index} className="border p-4"> {/* Tilføjet en border og padding til hver reservation */}
+                <h4 className="font-bold">Reservation {index + 1}:</h4>
+                <p>Check-in Date: {reservation.checkInDate}</p>
+                <p>Check-out Date: {reservation.checkOutDate}</p>
+                <p>Destination: {reservation.destination}</p>
+                <p>Room Type: {reservation.roomType}</p>
+                <button onClick={() => handleDeleteReservation(index)}>Delete</button>
+            </div>
+        ))}
+    </div>
+</ContentWrapper>
+
+
+
         );
     }
 };

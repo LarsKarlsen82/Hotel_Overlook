@@ -81,7 +81,7 @@ const NavBar = () => {
   {/* First star */}
   <FontAwesomeIcon icon={faStar} />
   {/* Line after the first star */}
-  <div className="absolute top-1/2 left-8 transform -translate-y-0.5 w-1/5 h-0.5 bg-yellow-500"></div>
+  <div className="absolute top-1/2 left-8 transform -translate-y-0.5 w-56 h-0.5 bg-yellow-500"></div>
   <FontAwesomeIcon icon={faStar} />
   <FontAwesomeIcon icon={faStar} />
   <FontAwesomeIcon icon={faStar} />

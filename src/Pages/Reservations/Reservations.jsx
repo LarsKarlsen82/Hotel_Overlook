@@ -220,27 +220,29 @@ const renderHotelDetails = hotelId && hotelTitle && roomId && (
     {formErrors.destination && <p className="text-red-500 text-sm">{formErrors.destination}</p>}
   </div>
 
-        <div className="mb-4 flex">
-          <div className="w-1/2 mr-2">
-            <label className="block text-sm font-medium">Vælg værelse:</label>
-            <select
-              name="roomType"
-              value={formData.roomType}
-              onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded"
-            >
-              <option value="">Vælg værelse</option>
-              <option value="single">Economy Room</option>
-              <option value="single">Superior Plus Room</option>
-              <option value="single">Superior Room</option>
-              <option value="single">Junior Suite Room</option>
-              <option value="single">Presidential Suite Room</option>
-              <option value="single">Standard Single Room</option>
-              <option value="single">Standard Room</option>
-              {/* Add more options as needed */}
-            </select>
-            {formErrors.roomType && <p className="text-red-500 text-sm">{formErrors.roomType}</p>}
-          </div>
+  <div className="mb-4 flex">
+  <div className="w-1/2 mr-2">
+    <label className="block text-sm font-medium">Vælg værelse:</label>
+    <select
+      name="roomType"
+      value={formData.roomType}
+      onChange={handleInputChange}
+      className="mt-1 p-2 w-full border rounded"
+    >
+      <option value="">Vælg værelse</option>
+      <option value="economy">Economy Room</option>
+      <option value="superiorPlus">Superior Plus Room</option>
+      <option value="superior">Superior Room</option>
+      <option value="juniorSuite">Junior Suite Room</option>
+      <option value="presidentialSuite">Presidential Suite Room</option>
+      <option value="standardSingle">Standard Single Room</option>
+      <option value="standard">Standard Room</option>
+      {/* Add more options as needed */}
+    </select>
+    {formErrors.roomType && <p className="text-red-500 text-sm">{formErrors.roomType}</p>}
+  </div>
+
+
 
           <div className="w-1/2 ml-2">
             <label className="block text-sm font-medium">Vælg antal personer:</label>
@@ -434,4 +436,6 @@ const renderHotelDetails = hotelId && hotelTitle && roomId && (
 };
 
 export default Reservation;
+
+
 

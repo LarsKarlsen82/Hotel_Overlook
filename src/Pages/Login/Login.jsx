@@ -1,5 +1,4 @@
 // Login.jsxx
-
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import { Auth } from "@supabase/auth-ui-react";

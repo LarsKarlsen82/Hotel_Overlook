@@ -7,7 +7,7 @@
 
 4. FlowChart for Hotel Overlook ligger på min github wiki
 
-5. For nærmere informatiner, se min rapport som er vedhæftet  til denne opgave.
+5. For nærmere informationer, se min rapport som er vedhæftet  til denne opgave.
 
 * For at starte web app:
 
